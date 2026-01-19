@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { shuffleArray } from '@/data/words';
 
-export const GameScreen = ({ players, wordData, onStartVoting }) => {
+export const GameScreen = ({ players, wordData, onStartVoting, t }) => {
   const [currentTurn, setCurrentTurn] = useState(0);
   const [playerOrder, setPlayerOrder] = useState([]);
   const [roundsCompleted, setRoundsCompleted] = useState(0);
@@ -68,14 +68,14 @@ export const GameScreen = ({ players, wordData, onStartVoting }) => {
           >
             <MessageCircle className="w-5 h-5 text-primary" />
             <span className="text-sm font-semibold text-primary">
-              Putaran {roundsCompleted + 1} dari {totalRounds}
+              {t.round} {roundsCompleted + 1} / {totalRounds}
             </span>
           </motion.div>
           <h1 className="text-3xl sm:text-4xl font-bold mb-3 text-foreground">
-            Berikan Petunjuk
+            {t.title}
           </h1>
           <p className="text-muted-foreground text-sm sm:text-base">
-            Jelaskan kata rahasia tanpa menyebutkannya secara langsung
+            {t.subtitle}
           </p>
         </div>
 
@@ -90,7 +90,7 @@ export const GameScreen = ({ players, wordData, onStartVoting }) => {
             />
           </div>
           <p className="text-xs text-muted-foreground text-center mt-2">
-            {roundsCompleted * players.length + currentTurn + 1} / {totalRounds * players.length} giliran
+            {roundsCompleted * players.length + currentTurn + 1} / {totalRounds * players.length} {t.turn.toLowerCase()}
           </p>
         </div>
 
@@ -121,15 +121,15 @@ export const GameScreen = ({ players, wordData, onStartVoting }) => {
               </span>
             </motion.div>
             <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-foreground">
-              Giliran {currentPlayer.name}
+              {t.currentTurn}: {currentPlayer.name}
             </h2>
             <p className="text-sm text-muted-foreground mb-6">
-              Berikan petunjuk tentang kata rahasia Anda
+              {t.giveClue}
             </p>
 
             <div className="flex flex-col gap-3 mb-6">
               <div className="p-4 rounded-lg bg-muted/50 border border-border">
-                <p className="text-xs text-muted-foreground mb-1">Kategori</p>
+                <p className="text-xs text-muted-foreground mb-1">{t.category}</p>
                 <p className="text-lg font-semibold text-foreground">{wordData.category}</p>
               </div>
             </div>
@@ -139,8 +139,8 @@ export const GameScreen = ({ players, wordData, onStartVoting }) => {
               className="w-full h-14 text-lg font-semibold gradient-primary hover:opacity-90 transition-opacity"
             >
               {currentTurn === playerOrder.length - 1 && roundsCompleted === totalRounds - 1
-                ? 'Mulai Voting'
-                : 'Pemain Berikutnya'
+                ? t.startVoting
+                : t.nextTurn
               }
               <ArrowRight className="h-6 w-6 ml-2" />
             </Button>
@@ -151,7 +151,7 @@ export const GameScreen = ({ players, wordData, onStartVoting }) => {
         <Card className="p-4 bg-card border-border">
           <div className="flex items-center gap-2 mb-4">
             <Users className="w-5 h-5 text-muted-foreground" />
-            <h3 className="text-sm font-semibold text-muted-foreground">Urutan Pemain</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground">{t.players}</h3>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {playerOrder.map((player, index) => (

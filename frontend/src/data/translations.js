@@ -1,0 +1,213 @@
+export const translations = {
+  id: {
+    // SetupScreen
+    setup: {
+      title: "Siapa Imposter?",
+      subtitle: "Masukkan nama pemain untuk memulai permainan",
+      playerPlaceholder: "Pemain",
+      addPlayer: "Tambah Pemain",
+      startGame: "Mulai Permainan",
+      playersReady: "pemain siap",
+      minPlayersError: "Minimal 3 pemain diperlukan untuk bermain!",
+      duplicateNamesError: "Nama pemain tidak boleh sama!",
+      howToPlay: "Cara Bermain",
+      
+      // Tutorial
+      tutorialTitle: "Cara Bermain \"Siapa Imposter?\"",
+      tutorialSubtitle: "Permainan deduksi sosial yang seru untuk 3+ pemain",
+      objective: "Tujuan Permainan",
+      objectiveInnocent: "Pemain Biasa:",
+      objectiveInnocentDesc: "Temukan siapa imposter di antara kalian",
+      objectiveImposter: "Imposter:",
+      objectiveImposterDesc: "Sembunyi identitasmu dan hindari ketahuan!",
+      rules: "Peraturan",
+      step1Title: "Lihat Role",
+      step1Desc: "Setiap pemain akan melihat role mereka secara bergantian. Pemain biasa mendapat kata rahasia (misal: \"Kucing\"), sedangkan imposter hanya mendapat kategori (misal: \"Hewan\").",
+      step2Title: "Diskusi & Beri Petunjuk",
+      step2Desc: "Secara bergantian, setiap pemain memberikan petunjuk tentang kata mereka tanpa menyebutkan kata tersebut secara langsung. Imposter harus berpura-pura tahu kata yang dimaksud!",
+      step2Example: "Contoh:",
+      step2ExampleClue: "Kata: \"Kucing\" → Petunjuk: \"Hewan yang suka tidur dan mengeong\"",
+      step2ExampleDont: "❌ Jangan: \"K-U-C-I-N-G\" atau terlalu spesifik!",
+      step3Title: "Voting",
+      step3Desc: "Setelah diskusi, semua pemain memilih siapa yang mereka curigai sebagai imposter.",
+      step4Title: "Hasil",
+      step4Desc: "Imposter terungkap! Apakah tebakan kalian benar?",
+      tips: "💡 Tips",
+      tip1: "Untuk Pemain Biasa:",
+      tip1Desc: "Beri petunjuk yang cukup spesifik agar pemain lain tahu kamu bukan imposter",
+      tip2: "Untuk Imposter:",
+      tip2Desc: "Dengarkan petunjuk orang lain dan coba tebak kata rahasianya, lalu beri petunjuk yang umum",
+      tip3: "Perhatikan pemain yang memberikan petunjuk terlalu umum atau tidak nyambung!",
+      tutorialButton: "Mengerti, Ayo Main!",
+    },
+    
+    // RoleScreen
+    role: {
+      turnTitle: "Giliran",
+      passDevice: "Berikan perangkat ke",
+      ready: "Saya Siap!",
+      showRole: "Lihat Role Saya",
+      hideRole: "Sembunyikan Role",
+      yourRole: "Role Kamu",
+      innocent: "PEMAIN BIASA",
+      imposter: "IMPOSTER",
+      yourWord: "Kata Kamu",
+      category: "Kategori",
+      remember: "Ingat kata ini dan berikan petunjuk yang relevan!",
+      rememberImposter: "Dengarkan petunjuk dari pemain lain dan coba tebak kata rahasianya!",
+      next: "Lanjut",
+      startGame: "Mulai Permainan",
+    },
+    
+    // GameScreen
+    game: {
+      title: "Diskusi & Petunjuk",
+      subtitle: "Berikan petunjuk tentang kata kalian",
+      round: "Putaran",
+      turn: "Giliran",
+      currentTurn: "Giliran Sekarang",
+      category: "Kategori",
+      giveClue: "Berikan petunjuk tanpa menyebut kata secara langsung",
+      nextTurn: "Giliran Selanjutnya",
+      startVoting: "Mulai Voting",
+      players: "Pemain",
+    },
+    
+    // VotingScreen
+    voting: {
+      title: "Saatnya Voting!",
+      subtitle: "Pilih siapa yang kamu curigai sebagai imposter",
+      selectPrompt: "Pilih pemain yang kamu curigai",
+      confirmVote: "Konfirmasi Pilihan",
+      voteFor: "Vote untuk",
+    },
+    
+    // ResultScreen
+    result: {
+      innocentsWin: "PEMAIN BIASA MENANG!",
+      imposterWins: "IMPOSTER MENANG!",
+      innocentsWinDesc: "Kalian berhasil menemukan imposter!",
+      imposterWinsDesc: "Imposter berhasil menyembunyikan identitasnya!",
+      theImposter: "Imposternya adalah",
+      suspected: "Yang dicurigai",
+      actualWord: "Kata Sebenarnya",
+      category: "Kategori",
+      playAgain: "Main Lagi",
+      backToSetup: "Kembali ke Setup",
+    },
+    
+    // Language
+    language: {
+      select: "Bahasa",
+      id: "Bahasa Indonesia",
+      en: "English",
+    }
+  },
+  
+  en: {
+    // SetupScreen
+    setup: {
+      title: "Who's The Imposter?",
+      subtitle: "Enter player names to start the game",
+      playerPlaceholder: "Player",
+      addPlayer: "Add Player",
+      startGame: "Start Game",
+      playersReady: "players ready",
+      minPlayersError: "Minimum 3 players required to play!",
+      duplicateNamesError: "Player names must be unique!",
+      howToPlay: "How to Play",
+      
+      // Tutorial
+      tutorialTitle: "How to Play \"Who's The Imposter?\"",
+      tutorialSubtitle: "A fun social deduction game for 3+ players",
+      objective: "Game Objective",
+      objectiveInnocent: "Innocent Players:",
+      objectiveInnocentDesc: "Find out who the imposter is among you",
+      objectiveImposter: "Imposter:",
+      objectiveImposterDesc: "Hide your identity and avoid being caught!",
+      rules: "Rules",
+      step1Title: "View Role",
+      step1Desc: "Each player will view their role one by one. Innocent players get a secret word (e.g., \"Cat\"), while the imposter only gets the category (e.g., \"Animal\").",
+      step2Title: "Discussion & Give Clues",
+      step2Desc: "Take turns giving clues about your word without mentioning it directly. The imposter must pretend to know the word!",
+      step2Example: "Example:",
+      step2ExampleClue: "Word: \"Cat\" → Clue: \"An animal that likes to sleep and meow\"",
+      step2ExampleDont: "❌ Don't: \"C-A-T\" or too specific!",
+      step3Title: "Voting",
+      step3Desc: "After discussion, all players vote on who they suspect is the imposter.",
+      step4Title: "Result",
+      step4Desc: "The imposter is revealed! Was your guess correct?",
+      tips: "💡 Tips",
+      tip1: "For Innocent Players:",
+      tip1Desc: "Give clues specific enough so others know you're not the imposter",
+      tip2: "For Imposter:",
+      tip2Desc: "Listen to others' clues and try to guess the secret word, then give generic clues",
+      tip3: "Watch out for players giving clues that are too vague or don't match!",
+      tutorialButton: "Got it, Let's Play!",
+    },
+    
+    // RoleScreen
+    role: {
+      turnTitle: "Turn",
+      passDevice: "Pass device to",
+      ready: "I'm Ready!",
+      showRole: "Show My Role",
+      hideRole: "Hide Role",
+      yourRole: "Your Role",
+      innocent: "INNOCENT",
+      imposter: "IMPOSTER",
+      yourWord: "Your Word",
+      category: "Category",
+      remember: "Remember this word and give relevant clues!",
+      rememberImposter: "Listen to clues from other players and try to guess the secret word!",
+      next: "Next",
+      startGame: "Start Game",
+    },
+    
+    // GameScreen
+    game: {
+      title: "Discussion & Clues",
+      subtitle: "Give clues about your word",
+      round: "Round",
+      turn: "Turn",
+      currentTurn: "Current Turn",
+      category: "Category",
+      giveClue: "Give a clue without saying the word directly",
+      nextTurn: "Next Turn",
+      startVoting: "Start Voting",
+      players: "Players",
+    },
+    
+    // VotingScreen
+    voting: {
+      title: "Time to Vote!",
+      subtitle: "Choose who you suspect is the imposter",
+      selectPrompt: "Select the player you suspect",
+      confirmVote: "Confirm Vote",
+      voteFor: "Vote for",
+    },
+    
+    // ResultScreen
+    result: {
+      innocentsWin: "INNOCENTS WIN!",
+      imposterWins: "IMPOSTER WINS!",
+      innocentsWinDesc: "You successfully found the imposter!",
+      imposterWinsDesc: "The imposter successfully hid their identity!",
+      theImposter: "The imposter was",
+      suspected: "Suspected",
+      actualWord: "Actual Word",
+      category: "Category",
+      playAgain: "Play Again",
+      backToSetup: "Back to Setup",
+    },
+    
+    // Language
+    language: {
+      select: "Language",
+      id: "Bahasa Indonesia",
+      en: "English",
+    }
+  }
+};
+
+export const getTranslation = (lang) => translations[lang] || translations.id;

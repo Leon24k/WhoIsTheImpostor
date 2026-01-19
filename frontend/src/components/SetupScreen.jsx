@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, X, Play, Users, HelpCircle, Eye, MessageCircle, Vote, Target } from 'lucide-react';
+import { Plus, X, Play, Users, HelpCircle, Eye, MessageCircle, Vote, Target, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -12,8 +12,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { translations } from '@/data/translations';
 
-export const SetupScreen = ({ onStartGame }) => {
+export const SetupScreen = ({ onStartGame, language, setLanguage, t }) => {
   const [players, setPlayers] = useState(['']);
   const [error, setError] = useState('');
   const [showTutorial, setShowTutorial] = useState(false);
@@ -41,14 +49,14 @@ export const SetupScreen = ({ onStartGame }) => {
     const validPlayers = players.filter(p => p.trim() !== '');
     
     if (validPlayers.length < 3) {
-      setError('Minimal 3 pemain diperlukan untuk bermain!');
+      setError(t.minPlayersError);
       return;
     }
     
     // Check for duplicate names
     const uniqueNames = new Set(validPlayers.map(p => p.toLowerCase().trim()));
     if (uniqueNames.size !== validPlayers.length) {
-      setError('Nama pemain tidak boleh sama!');
+      setError(t.duplicateNamesError);
       return;
     }
     
@@ -63,6 +71,28 @@ export const SetupScreen = ({ onStartGame }) => {
         transition={{ duration: 0.3 }}
         className="w-full max-w-md"
       >
+        {/* Language Selector - Top Right */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute top-4 right-4 z-10"
+        >
+          <Select value={language} onValueChange={setLanguage}>
+            <SelectTrigger className="w-[180px] border-2 border-primary/50 bg-card shadow-lg hover:border-primary transition-colors text-foreground font-medium">
+              <Languages className="h-4 w-4 mr-2 text-primary" />
+              <SelectValue className="font-semibold text-foreground" />
+            </SelectTrigger>
+            <SelectContent className="bg-card border-primary/30">
+              <SelectItem value="id" className="cursor-pointer hover:bg-primary/10 focus:bg-primary/20 text-foreground font-medium">
+                {translations.id.language.id}
+              </SelectItem>
+              <SelectItem value="en" className="cursor-pointer hover:bg-primary/10 focus:bg-primary/20 text-foreground font-medium">
+                {translations.en.language.en}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </motion.div>
+
         {/* Header */}
         <div className="text-center mb-8">
           <motion.div
@@ -79,7 +109,7 @@ export const SetupScreen = ({ onStartGame }) => {
             transition={{ delay: 0.2 }}
             className="text-4xl sm:text-5xl font-bold mb-3 text-gradient-primary"
           >
-            Siapa Imposter?
+            {t.title}
           </motion.h1>
           <motion.p
             initial={{ y: -20, opacity: 0 }}
@@ -87,7 +117,7 @@ export const SetupScreen = ({ onStartGame }) => {
             transition={{ delay: 0.3 }}
             className="text-muted-foreground text-sm sm:text-base"
           >
-            Masukkan nama pemain untuk memulai permainan
+            {t.subtitle}
           </motion.p>
           
           {/* Tutorial Button */}
@@ -105,16 +135,16 @@ export const SetupScreen = ({ onStartGame }) => {
                   className="text-primary border-primary/30 hover:bg-primary/10"
                 >
                   <HelpCircle className="h-4 w-4 mr-2" />
-                  Cara Bermain
+                  {t.howToPlay}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="text-2xl font-bold text-gradient-primary">
-                    Cara Bermain "Siapa Imposter?"
+                    {t.tutorialTitle}
                   </DialogTitle>
                   <DialogDescription className="text-base">
-                    Permainan deduksi sosial yang seru untuk 3+ pemain
+                    {t.tutorialSubtitle}
                   </DialogDescription>
                 </DialogHeader>
                 
@@ -123,17 +153,17 @@ export const SetupScreen = ({ onStartGame }) => {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Target className="h-5 w-5 text-primary" />
-                      <h3 className="font-semibold text-lg">Tujuan Permainan</h3>
+                      <h3 className="font-semibold text-lg">{t.objective}</h3>
                     </div>
                     <p className="text-muted-foreground pl-7">
-                      <strong className="text-foreground">Pemain Biasa:</strong> Temukan siapa imposter di antara kalian<br/>
-                      <strong className="text-destructive">Imposter:</strong> Sembunyi identitasmu dan hindari ketahuan!
+                      <strong className="text-foreground">{t.objectiveInnocent}</strong> {t.objectiveInnocentDesc}<br/>
+                      <strong className="text-destructive">{t.objectiveImposter}</strong> {t.objectiveImposterDesc}
                     </p>
                   </div>
 
                   {/* Peraturan */}
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg">Peraturan</h3>
+                    <h3 className="font-semibold text-lg">{t.rules}</h3>
                     
                     <div className="space-y-3 pl-2">
                       {/* Step 1 */}
@@ -144,12 +174,10 @@ export const SetupScreen = ({ onStartGame }) => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <Eye className="h-4 w-4 text-primary" />
-                            <h4 className="font-medium">Lihat Role</h4>
+                            <h4 className="font-medium">{t.step1Title}</h4>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            Setiap pemain akan melihat role mereka secara bergantian. 
-                            <strong className="text-foreground"> Pemain biasa</strong> mendapat kata rahasia (misal: "Kucing"), 
-                            sedangkan <strong className="text-destructive">imposter</strong> hanya mendapat kategori (misal: "Hewan").
+                            {t.step1Desc}
                           </p>
                         </div>
                       </div>
@@ -162,16 +190,15 @@ export const SetupScreen = ({ onStartGame }) => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <MessageCircle className="h-4 w-4 text-primary" />
-                            <h4 className="font-medium">Diskusi & Beri Petunjuk</h4>
+                            <h4 className="font-medium">{t.step2Title}</h4>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            Secara bergantian, setiap pemain memberikan <strong className="text-foreground">petunjuk tentang kata mereka </strong> 
-                             tanpa menyebutkan kata tersebut secara langsung. Imposter harus berpura-pura tahu kata yang dimaksud!
+                            {t.step2Desc}
                           </p>
                           <div className="mt-2 p-2 bg-muted rounded text-xs">
-                            <strong>Contoh:</strong><br/>
-                            Kata: "Kucing" → Petunjuk: "Hewan yang suka tidur dan mengeong"<br/>
-                            ❌ Jangan: "K-U-C-I-N-G" atau terlalu spesifik!
+                            <strong>{t.step2Example}</strong><br/>
+                            {t.step2ExampleClue}<br/>
+                            {t.step2ExampleDont}
                           </div>
                         </div>
                       </div>
@@ -184,10 +211,10 @@ export const SetupScreen = ({ onStartGame }) => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <Vote className="h-4 w-4 text-primary" />
-                            <h4 className="font-medium">Voting</h4>
+                            <h4 className="font-medium">{t.step3Title}</h4>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            Setelah diskusi, semua pemain memilih siapa yang mereka curigai sebagai imposter.
+                            {t.step3Desc}
                           </p>
                         </div>
                       </div>
@@ -200,10 +227,10 @@ export const SetupScreen = ({ onStartGame }) => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <Target className="h-4 w-4 text-primary" />
-                            <h4 className="font-medium">Hasil</h4>
+                            <h4 className="font-medium">{t.step4Title}</h4>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            Imposter terungkap! Apakah tebakan kalian benar?
+                            {t.step4Desc}
                           </p>
                         </div>
                       </div>
@@ -212,18 +239,18 @@ export const SetupScreen = ({ onStartGame }) => {
 
                   {/* Tips */}
                   <div className="bg-primary/10 rounded-lg p-4 border border-primary/20">
-                    <h3 className="font-semibold text-lg mb-2">💡 Tips</h3>
+                    <h3 className="font-semibold text-lg mb-2">{t.tips}</h3>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• <strong className="text-foreground">Untuk Pemain Biasa:</strong> Beri petunjuk yang cukup spesifik agar pemain lain tahu kamu bukan imposter</li>
-                      <li>• <strong className="text-destructive">Untuk Imposter:</strong> Dengarkan petunjuk orang lain dan coba tebak kata rahasianya, lalu beri petunjuk yang umum</li>
-                      <li>• Perhatikan pemain yang memberikan petunjuk terlalu umum atau tidak nyambung!</li>
+                      <li>• <strong className="text-foreground">{t.tip1}</strong> {t.tip1Desc}</li>
+                      <li>• <strong className="text-destructive">{t.tip2}</strong> {t.tip2Desc}</li>
+                      <li>• {t.tip3}</li>
                     </ul>
                   </div>
                 </div>
 
                 <div className="flex justify-end">
                   <Button onClick={() => setShowTutorial(false)} className="gradient-primary">
-                    Mengerti, Ayo Main!
+                    {t.tutorialButton}
                   </Button>
                 </div>
               </DialogContent>
@@ -245,7 +272,7 @@ export const SetupScreen = ({ onStartGame }) => {
                 <div className="flex-1">
                   <Input
                     type="text"
-                    placeholder={`Pemain ${index + 1}`}
+                    placeholder={`${t.playerPlaceholder} ${index + 1}`}
                     value={player}
                     onChange={(e) => updatePlayer(index, e.target.value)}
                     className="bg-muted border-border text-foreground placeholder:text-muted-foreground h-12 text-base"
@@ -281,7 +308,7 @@ export const SetupScreen = ({ onStartGame }) => {
             className="w-full border-border hover:bg-muted h-12 text-base"
           >
             <Plus className="h-5 w-5 mr-2" />
-            Tambah Pemain
+            {t.addPlayer}
           </Button>
         </Card>
 
@@ -292,11 +319,11 @@ export const SetupScreen = ({ onStartGame }) => {
           disabled={players.filter(p => p.trim() !== '').length < 3}
         >
           <Play className="h-6 w-6 mr-2 fill-current" />
-          Mulai Permainan
+          {t.startGame}
         </Button>
 
         <p className="text-center text-xs text-muted-foreground mt-4">
-          {players.filter(p => p.trim() !== '').length} / {players.length} pemain siap
+          {players.filter(p => p.trim() !== '').length} / {players.length} {t.playersReady}
         </p>
       </motion.div>
     </div>

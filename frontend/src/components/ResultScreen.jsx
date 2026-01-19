@@ -3,7 +3,7 @@ import { Trophy, XCircle, RotateCcw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
-export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordData, onPlayAgain, onBackToSetup }) => {
+export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordData, onPlayAgain, onBackToSetup, t }) => {
   const actualImposter = players[imposterIndex];
   const innocentsWin = suspectedImposter === actualImposter;
 
@@ -42,7 +42,7 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
               innocentsWin ? 'text-gradient-primary' : 'text-destructive'
             }`}
           >
-            {innocentsWin ? 'Pemain Menang!' : 'Imposter Menang!'}
+            {innocentsWin ? t.innocentsWin : t.imposterWins}
           </motion.h1>
           
           <motion.p
@@ -52,8 +52,8 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
             className="text-muted-foreground text-base sm:text-lg"
           >
             {innocentsWin 
-              ? 'Kalian berhasil menemukan Imposter!' 
-              : 'Imposter berhasil menipu kalian semua!'}
+              ? t.innocentsWinDesc
+              : t.imposterWinsDesc}
           </motion.p>
         </div>
 
@@ -67,10 +67,10 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
             <div className="space-y-6">
               {/* Word Reveal */}
               <div className="text-center pb-6 border-b border-border">
-                <p className="text-sm text-muted-foreground mb-2">Kata Rahasia</p>
+                <p className="text-sm text-muted-foreground mb-2">{t.actualWord}</p>
                 <p className="text-4xl font-bold text-primary mb-2">{wordData.word}</p>
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted">
-                  <span className="text-xs text-muted-foreground">Kategori:</span>
+                  <span className="text-xs text-muted-foreground">{t.category}:</span>
                   <span className="text-sm font-semibold text-foreground">{wordData.category}</span>
                 </div>
               </div>
@@ -82,7 +82,7 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
                     <span className="text-xl">🎭</span>
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm text-muted-foreground mb-1">Imposter Sebenarnya</p>
+                    <p className="text-sm text-muted-foreground mb-1">{t.theImposter}</p>
                     <p className="text-lg font-bold text-destructive">{actualImposter}</p>
                   </div>
                 </div>
@@ -102,7 +102,7 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm text-muted-foreground mb-1">Pilihan Pemain</p>
+                    <p className="text-sm text-muted-foreground mb-1">{t.suspected}</p>
                     <p className={`text-lg font-bold ${
                       innocentsWin ? 'text-success' : 'text-foreground'
                     }`}>
@@ -149,7 +149,7 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
             className="h-14 text-lg font-semibold gradient-primary hover:opacity-90 transition-opacity"
           >
             <RotateCcw className="h-5 w-5 mr-2" />
-            Main Lagi
+            {t.playAgain}
           </Button>
           <Button
             onClick={onBackToSetup}
@@ -157,7 +157,7 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
             className="h-14 text-lg font-semibold border-border hover:bg-muted"
           >
             <Home className="h-5 w-5 mr-2" />
-            Menu Utama
+            {t.backToSetup}
           </Button>
         </motion.div>
 

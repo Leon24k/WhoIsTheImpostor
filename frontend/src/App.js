@@ -6,6 +6,7 @@ import { GameScreen } from '@/components/GameScreen';
 import { VotingScreen } from '@/components/VotingScreen';
 import { ResultScreen } from '@/components/ResultScreen';
 import { getRandomWord, getRandomImposterIndex } from '@/data/words';
+import { getTranslation } from '@/data/translations';
 
 function App() {
   const [gameState, setGameState] = useState('setup'); // setup, role, game, voting, result
@@ -14,6 +15,9 @@ function App() {
   const [wordData, setWordData] = useState(null);
   const [imposterIndex, setImposterIndex] = useState(null);
   const [suspectedImposter, setSuspectedImposter] = useState(null);
+  const [language, setLanguage] = useState('id'); // 'id' or 'en'
+  
+  const t = getTranslation(language);
 
   const handleStartGame = (playerNames) => {
     const word = getRandomWord();
@@ -66,7 +70,7 @@ function App() {
   return (
     <div className="App dark min-h-screen">
       {gameState === 'setup' && (
-        <SetupScreen onStartGame={handleStartGame} />
+        <SetupScreen onStartGame={handleStartGame} language={language} setLanguage={setLanguage} t={t.setup} />
       )}
       
       {gameState === 'role' && (
@@ -77,6 +81,7 @@ function App() {
           imposterIndex={imposterIndex}
           onNext={handleNextPlayer}
           onComplete={handleRoleComplete}
+          t={t.role}
         />
       )}
       
@@ -85,6 +90,7 @@ function App() {
           players={players}
           wordData={wordData}
           onStartVoting={handleStartVoting}
+          t={t.game}
         />
       )}
       
@@ -92,6 +98,7 @@ function App() {
         <VotingScreen
           players={players}
           onVoteComplete={handleVoteComplete}
+          t={t.voting}
         />
       )}
       
@@ -103,6 +110,7 @@ function App() {
           wordData={wordData}
           onPlayAgain={handlePlayAgain}
           onBackToSetup={handleBackToSetup}
+          t={t.result}
         />
       )}
     </div>

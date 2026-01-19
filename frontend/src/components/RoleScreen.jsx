@@ -4,7 +4,7 @@ import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
-export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterIndex, onNext, onComplete }) => {
+export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterIndex, onNext, onComplete, t }) => {
   const [revealed, setRevealed] = useState(false);
   const currentPlayer = players[currentPlayerIndex];
   const isImposter = currentPlayerIndex === imposterIndex;
@@ -44,10 +44,10 @@ export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterInde
             <span className="text-2xl font-bold text-primary">{currentPlayerIndex + 1}</span>
           </motion.div>
           <h2 className="text-2xl font-bold text-foreground mb-2">
-            Giliran: {currentPlayer}
+            {t.turnTitle}: {currentPlayer}
           </h2>
           <p className="text-sm text-muted-foreground">
-            {currentPlayerIndex + 1} dari {players.length} pemain
+            {currentPlayerIndex + 1} / {players.length}
           </p>
         </div>
 
@@ -77,17 +77,17 @@ export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterInde
                     <EyeOff className="w-12 h-12 text-muted-foreground" />
                   </motion.div>
                   <h3 className="text-xl font-semibold mb-3 text-foreground">
-                    Ketuk untuk melihat peran Anda
+                    {t.passDevice} {currentPlayer}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-6">
-                    Pastikan pemain lain tidak melihat layar
+                    {t.ready}
                   </p>
                   <Button
                     onClick={handleReveal}
                     className="w-full h-14 text-lg font-semibold gradient-primary hover:opacity-90 transition-opacity glow-primary"
                   >
                     <Eye className="h-6 w-6 mr-2" />
-                    Lihat Peran
+                    {t.showRole}
                   </Button>
                 </div>
               </Card>
@@ -131,13 +131,13 @@ export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterInde
                           <span className="text-4xl">🎭</span>
                         </div>
                         <h3 className="text-3xl font-bold mb-3 text-destructive">
-                          Kamu adalah
+                          {t.yourRole}
                         </h3>
                         <p className="text-5xl font-bold mb-4 text-destructive">
-                          IMPOSTER
+                          {t.imposter}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Berpura-puralah mengetahui kata rahasianya!
+                          {t.category}: {wordData.category}
                         </p>
                       </>
                     ) : (
@@ -146,13 +146,13 @@ export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterInde
                           <span className="text-4xl">✨</span>
                         </div>
                         <h3 className="text-xl font-semibold mb-2 text-muted-foreground">
-                          Kata rahasia Anda
+                          {t.yourWord}
                         </h3>
                         <p className="text-5xl font-bold mb-4 text-primary">
                           {wordData.word}
                         </p>
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted">
-                          <span className="text-xs text-muted-foreground">Kategori:</span>
+                          <span className="text-xs text-muted-foreground">{t.category}:</span>
                           <span className="text-sm font-semibold text-foreground">{wordData.category}</span>
                         </div>
                       </>
@@ -167,7 +167,7 @@ export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterInde
                         : 'gradient-primary hover:opacity-90'
                     } transition-all`}
                   >
-                    {isLastPlayer ? 'Mulai Permainan' : 'Pemain Berikutnya'}
+                    {isLastPlayer ? t.startGame : t.next}
                     <ArrowRight className="h-6 w-6 ml-2" />
                   </Button>
                 </div>
@@ -186,8 +186,8 @@ export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterInde
           >
             <p className="text-xs text-center text-muted-foreground">
               {isImposter 
-                ? '💡 Dengarkan petunjuk dari pemain lain dan coba tebak kata rahasianya'
-                : '💡 Berikan petunjuk tanpa menyebutkan kata secara langsung'
+                ? `💡 ${t.rememberImposter}`
+                : `💡 ${t.remember}`
               }
             </p>
           </motion.div>
