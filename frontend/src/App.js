@@ -112,9 +112,9 @@ function App() {
         <html lang={language} />
         <title>{getPageTitle()}</title>
         <meta name="description" content={getPageDescription()} />
-        <link rel="alternate" hreflang="en" href="https://yourdomain.vercel.app/?lang=en" />
-        <link rel="alternate" hreflang="id" href="https://yourdomain.vercel.app/?lang=id" />
-        <link rel="alternate" hreflang="x-default" href="https://yourdomain.vercel.app" />
+        <link rel="alternate" hreflang="en" href="https://whoistheimpostorgame.vercel.app//?lang=en" />
+        <link rel="alternate" hreflang="id" href="https://whoistheimpostorgame.vercel.app//?lang=id" />
+        <link rel="alternate" hreflang="x-default" href="https://whoistheimpostorgame.vercel.app/" />
       </Helmet>
       
       <div className="App dark min-h-screen">

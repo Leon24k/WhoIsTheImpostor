@@ -4,7 +4,7 @@ Allow: /
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://yourdomain.vercel.app/sitemap.xml
+Sitemap: https://whoistheimpostorgame.vercel.app//sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 10
