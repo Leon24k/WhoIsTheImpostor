@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import '@/App.css';
 import { SetupScreen } from '@/components/SetupScreen';
 import { RoleScreen } from '@/components/RoleScreen';
@@ -77,9 +78,47 @@ function App() {
     setSuspectedImposter(null);
   };
 
+  const getPageTitle = () => {
+    const titles = {
+      id: {
+        setup: 'Siapa Imposter? - Game Party Offline',
+        role: 'Lihat Role Anda - Siapa Imposter?',
+        game: 'Diskusi & Petunjuk - Siapa Imposter?',
+        voting: 'Voting - Siapa Imposter?',
+        result: 'Hasil Permainan - Siapa Imposter?'
+      },
+      en: {
+        setup: 'Who Is The Imposter? - Offline Party Game',
+        role: 'See Your Role - Who Is The Imposter?',
+        game: 'Discussion & Clues - Who Is The Imposter?',
+        voting: 'Voting Time - Who Is The Imposter?',
+        result: 'Game Results - Who Is The Imposter?'
+      }
+    };
+    return titles[language][gameState];
+  };
+
+  const getPageDescription = () => {
+    const descriptions = {
+      id: 'Game party deduksi sosial offline untuk 3+ pemain. Ponsel Anda berperan sebagai game master - giliran melihat role dan temukan imposter bersama teman-teman secara langsung!',
+      en: 'Offline social deduction party game for 3+ players. Your phone acts as game master - pass the device, see your role, and find the imposter together in person!'
+    };
+    return descriptions[language];
+  };
+
   return (
-    <div className="App dark min-h-screen">
-      {gameState === 'setup' && (
+    <HelmetProvider>
+      <Helmet>
+        <html lang={language} />
+        <title>{getPageTitle()}</title>
+        <meta name="description" content={getPageDescription()} />
+        <link rel="alternate" hreflang="en" href="https://yourdomain.vercel.app/?lang=en" />
+        <link rel="alternate" hreflang="id" href="https://yourdomain.vercel.app/?lang=id" />
+        <link rel="alternate" hreflang="x-default" href="https://yourdomain.vercel.app" />
+      </Helmet>
+      
+      <div className="App dark min-h-screen">
+        {gameState === 'setup' && (
         <SetupScreen 
           onStartGame={handleStartGame} 
           language={language} 
@@ -132,7 +171,8 @@ function App() {
           t={t.result}
         />
       )}
-    </div>
+      </div>
+    </HelmetProvider>
   );
 }
 

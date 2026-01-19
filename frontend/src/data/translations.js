@@ -116,7 +116,7 @@ export const translations = {
       actualWord: "Kata Sebenarnya",
       category: "Kategori",
       playAgain: "Main Lagi",
-      backToSetup: "Kembali ke Setup",
+      backToSetup: "Kembali ke Home",
     },
     
     // Language
@@ -244,7 +244,7 @@ export const translations = {
       actualWord: "Actual Word",
       category: "Category",
       playAgain: "Play Again",
-      backToSetup: "Back to Setup",
+      backToSetup: "Back to Home",
     },
     
     // Language
