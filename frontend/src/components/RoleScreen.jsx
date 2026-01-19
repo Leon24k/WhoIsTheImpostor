@@ -4,10 +4,12 @@ import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
-export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterIndex, onNext, onComplete, t }) => {
+export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterIndex, onNext, onComplete, settings, t }) => {
   const [revealed, setRevealed] = useState(false);
   const currentPlayer = players[currentPlayerIndex];
-  const isImposter = currentPlayerIndex === imposterIndex;
+  const isImposter = Array.isArray(imposterIndex) 
+    ? imposterIndex.includes(currentPlayerIndex) 
+    : currentPlayerIndex === imposterIndex;
   const isLastPlayer = currentPlayerIndex === players.length - 1;
 
   const handleReveal = () => {
@@ -136,9 +138,16 @@ export const RoleScreen = ({ players, currentPlayerIndex, wordData, imposterInde
                         <p className="text-5xl font-bold mb-4 text-destructive">
                           {t.imposter}
                         </p>
-                        <p className="text-sm text-muted-foreground">
-                          {t.category}: {wordData.category}
-                        </p>
+                        {settings?.showCategoryToImposter && (
+                          <p className="text-sm text-muted-foreground">
+                            {t.category}: {wordData.category}
+                          </p>
+                        )}
+                        {!settings?.showCategoryToImposter && (
+                          <p className="text-sm text-muted-foreground italic">
+                            ({t.category} Hidden)
+                          </p>
+                        )}
                       </>
                     ) : (
                       <>

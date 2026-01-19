@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordData, onPlayAgain, onBackToSetup, t }) => {
-  const actualImposter = players[imposterIndex];
-  const innocentsWin = suspectedImposter === actualImposter;
+  // Support both single imposter (number) and multiple imposters (array)
+  const imposterIndices = Array.isArray(imposterIndex) ? imposterIndex : [imposterIndex];
+  const actualImposters = imposterIndices.map(idx => players[idx]);
+  const innocentsWin = actualImposters.includes(suspectedImposter);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
@@ -77,15 +79,20 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
 
               {/* Imposter Reveal */}
               <div className="space-y-3">
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-destructive/20 flex items-center justify-center">
-                    <span className="text-xl">🎭</span>
+                {/* Show all imposters */}
+                {actualImposters.map((imposter, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-destructive/20 flex items-center justify-center">
+                      <span className="text-xl">🎭</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm text-muted-foreground mb-1">
+                        {actualImposters.length > 1 ? `${t.theImposter} #${idx + 1}` : t.theImposter}
+                      </p>
+                      <p className="text-lg font-bold text-destructive">{imposter}</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground mb-1">{t.theImposter}</p>
-                    <p className="text-lg font-bold text-destructive">{actualImposter}</p>
-                  </div>
-                </div>
+                ))}
 
                 <div className={`flex items-start gap-3 p-4 rounded-lg ${
                   innocentsWin
@@ -116,21 +123,24 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
               <div className="pt-4 border-t border-border">
                 <p className="text-sm text-muted-foreground mb-3">Semua Pemain</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {players.map((player, index) => (
-                    <div
-                      key={player}
-                      className={`p-3 rounded-lg border text-center ${
-                        index === imposterIndex
-                          ? 'bg-destructive/10 border-destructive/30 text-destructive font-semibold'
-                          : 'bg-card border-border text-foreground'
-                      }`}
-                    >
-                      <p className="text-sm">
-                        {index === imposterIndex && '🎭 '}
-                        {player}
-                      </p>
-                    </div>
-                  ))}
+                  {players.map((player, index) => {
+                    const isImposter = imposterIndices.includes(index);
+                    return (
+                      <div
+                        key={player}
+                        className={`p-3 rounded-lg border text-center ${
+                          isImposter
+                            ? 'bg-destructive/10 border-destructive/30 text-destructive font-semibold'
+                            : 'bg-card border-border text-foreground'
+                        }`}
+                      >
+                        <p className="text-sm">
+                          {isImposter && '🎭 '}
+                          {player}
+                        </p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -154,7 +164,7 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
           <Button
             onClick={onBackToSetup}
             variant="outline"
-            className="h-14 text-lg font-semibold border-border hover:bg-muted"
+            className="h-14 text-lg font-semibold border-primary/50 hover:bg-primary/10 text-foreground hover:text-primary transition-colors"
           >
             <Home className="h-5 w-5 mr-2" />
             {t.backToSetup}

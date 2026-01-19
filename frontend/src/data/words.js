@@ -307,9 +307,20 @@ export const wordCategories = {
 };
 
 // Get a random word and category based on language
-export const getRandomWord = (language = 'id') => {
+export const getRandomWord = (language = 'id', categoryFilter = 'all') => {
   const categories = wordCategories[language] || wordCategories.id;
-  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+  
+  // Filter by category if specified
+  let availableCategories = categories;
+  if (categoryFilter !== 'all') {
+    availableCategories = categories.filter(cat => cat.name === categoryFilter);
+    // If no match, fall back to all categories
+    if (availableCategories.length === 0) {
+      availableCategories = categories;
+    }
+  }
+  
+  const randomCategory = availableCategories[Math.floor(Math.random() * availableCategories.length)];
   const randomWord = randomCategory.words[Math.floor(Math.random() * randomCategory.words.length)];
   return {
     word: randomWord,
@@ -317,9 +328,24 @@ export const getRandomWord = (language = 'id') => {
   };
 };
 
-// Get random imposter index
-export const getRandomImposterIndex = (playerCount) => {
-  return Math.floor(Math.random() * playerCount);
+// Get list of categories for a language
+export const getCategories = (language = 'id') => {
+  const categories = wordCategories[language] || wordCategories.id;
+  return categories.map(cat => cat.name);
+};
+
+// Get random imposter indices
+export const getRandomImposterIndex = (playerCount, imposterCount = 1) => {
+  const indices = [];
+  const availableIndices = Array.from({ length: playerCount }, (_, i) => i);
+  
+  for (let i = 0; i < Math.min(imposterCount, playerCount); i++) {
+    const randomIndex = Math.floor(Math.random() * availableIndices.length);
+    indices.push(availableIndices[randomIndex]);
+    availableIndices.splice(randomIndex, 1);
+  }
+  
+  return indices;
 };
 
 // Shuffle array (for randomizing player order)

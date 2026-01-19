@@ -1,24 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, Users, ArrowRight } from 'lucide-react';
+import { MessageCircle, Users, ArrowRight, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { shuffleArray } from '@/data/words';
 
-export const GameScreen = ({ players, wordData, onStartVoting, t }) => {
+export const GameScreen = ({ players, wordData, onStartVoting, settings, t }) => {
   const [currentTurn, setCurrentTurn] = useState(0);
   const [playerOrder, setPlayerOrder] = useState([]);
   const [roundsCompleted, setRoundsCompleted] = useState(0);
-  const totalRounds = 2; // Each player gives 2 clues
+  const [timeLeft, setTimeLeft] = useState(settings.timer);
+  const totalRounds = settings.rounds;
 
   useEffect(() => {
     // Randomize player order at start
     const shuffled = shuffleArray(players.map((name, index) => ({ name, index })));
     setPlayerOrder(shuffled);
   }, [players]);
-
-  const handleNextTurn = () => {
+  
+  const handleNextTurn = useCallback(() => {
     if (currentTurn < playerOrder.length - 1) {
       setCurrentTurn(currentTurn + 1);
     } else {
@@ -34,7 +35,30 @@ export const GameScreen = ({ players, wordData, onStartVoting, t }) => {
         onStartVoting();
       }
     }
-  };
+  }, [currentTurn, playerOrder, roundsCompleted, totalRounds, onStartVoting]);
+  
+  // Timer effect
+  useEffect(() => {
+    if (settings.timer > 0 && timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            // Auto-advance when timer runs out
+            handleNextTurn();
+            return settings.timer;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      
+      return () => clearInterval(timer);
+    }
+  }, [timeLeft, settings.timer, handleNextTurn]);
+  
+  // Reset timer when turn changes
+  useEffect(() => {
+    setTimeLeft(settings.timer);
+  }, [currentTurn, settings.timer]);
 
   const currentPlayer = playerOrder[currentTurn];
   const progress = ((roundsCompleted * players.length + currentTurn + 1) / (totalRounds * players.length)) * 100;
@@ -93,6 +117,30 @@ export const GameScreen = ({ players, wordData, onStartVoting, t }) => {
             {roundsCompleted * players.length + currentTurn + 1} / {totalRounds * players.length} {t.turn.toLowerCase()}
           </p>
         </div>
+        
+        {/* Timer Display */}
+        {settings.timer > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <Card className={`p-4 border-2 transition-colors ${
+              timeLeft <= 10 
+                ? 'border-destructive bg-destructive/10' 
+                : 'border-accent bg-accent/10'
+            }`}>
+              <div className="flex items-center justify-center gap-3">
+                <Clock className={`h-5 w-5 ${timeLeft <= 10 ? 'text-destructive' : 'text-accent'}`} />
+                <p className={`text-2xl font-bold ${
+                  timeLeft <= 10 ? 'text-destructive' : 'text-accent'
+                }`}>
+                  {timeLeft}s
+                </p>
+              </div>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Current Player Card */}
         <Card className="p-8 mb-6 bg-gradient-to-br from-card to-card-elevated border-border relative overflow-hidden">

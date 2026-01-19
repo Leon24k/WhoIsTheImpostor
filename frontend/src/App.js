@@ -17,15 +17,25 @@ function App() {
   const [suspectedImposter, setSuspectedImposter] = useState(null);
   const [language, setLanguage] = useState('id'); // 'id' or 'en'
   
+  // Game Settings
+  const [settings, setSettings] = useState({
+    timer: 0, // 0 means no timer, otherwise seconds per turn
+    rounds: 2, // number of rounds
+    sound: false, // sound effects on/off
+    category: 'all', // 'all' or specific category name
+    imposterCount: 1, // 1-3 imposters
+    showCategoryToImposter: true // whether imposters see the category
+  });
+  
   const t = getTranslation(language);
 
   const handleStartGame = (playerNames) => {
-    const word = getRandomWord(language);
-    const imposter = getRandomImposterIndex(playerNames.length);
+    const word = getRandomWord(language, settings.category);
+    const imposters = getRandomImposterIndex(playerNames.length, settings.imposterCount);
     
     setPlayers(playerNames);
     setWordData(word);
-    setImposterIndex(imposter);
+    setImposterIndex(imposters);
     setCurrentPlayerIndex(0);
     setGameState('role');
   };
@@ -48,7 +58,7 @@ function App() {
   };
 
   const handlePlayAgain = () => {
-    const word = getRandomWord(language);
+    const word = getRandomWord(language, settings.category);
     const imposter = getRandomImposterIndex(players.length);
     
     setWordData(word);
@@ -70,7 +80,14 @@ function App() {
   return (
     <div className="App dark min-h-screen">
       {gameState === 'setup' && (
-        <SetupScreen onStartGame={handleStartGame} language={language} setLanguage={setLanguage} t={t.setup} />
+        <SetupScreen 
+          onStartGame={handleStartGame} 
+          language={language} 
+          setLanguage={setLanguage} 
+          settings={settings}
+          setSettings={setSettings}
+          t={t.setup} 
+        />
       )}
       
       {gameState === 'role' && (
@@ -81,6 +98,7 @@ function App() {
           imposterIndex={imposterIndex}
           onNext={handleNextPlayer}
           onComplete={handleRoleComplete}
+          settings={settings}
           t={t.role}
         />
       )}
@@ -90,6 +108,7 @@ function App() {
           players={players}
           wordData={wordData}
           onStartVoting={handleStartVoting}
+          settings={settings}
           t={t.game}
         />
       )}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, X, Play, Users, HelpCircle, Eye, MessageCircle, Vote, Target, Languages } from 'lucide-react';
+import { Plus, X, Play, Users, HelpCircle, Eye, MessageCircle, Vote, Target, Languages, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -19,12 +19,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import { translations } from '@/data/translations';
+import { getCategories } from '@/data/words';
 
-export const SetupScreen = ({ onStartGame, language, setLanguage, t }) => {
+export const SetupScreen = ({ onStartGame, language, setLanguage, settings, setSettings, t }) => {
   const [players, setPlayers] = useState(['']);
   const [error, setError] = useState('');
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  
+  const categories = getCategories(language);
 
   const addPlayer = () => {
     setPlayers([...players, '']);
@@ -57,6 +64,17 @@ export const SetupScreen = ({ onStartGame, language, setLanguage, t }) => {
     const uniqueNames = new Set(validPlayers.map(p => p.toLowerCase().trim()));
     if (uniqueNames.size !== validPlayers.length) {
       setError(t.duplicateNamesError);
+      return;
+    }
+    
+    // Check minimum players for imposter count
+    const minPlayersRequired = [3, 5, 7]; // For 1, 2, 3 imposters
+    const minRequired = minPlayersRequired[settings.imposterCount - 1];
+    if (validPlayers.length < minRequired) {
+      const message = t.minPlayersForImposters
+        .replace('{count}', minRequired)
+        .replace('{imposters}', settings.imposterCount);
+      setError(message);
       return;
     }
     
@@ -125,7 +143,7 @@ export const SetupScreen = ({ onStartGame, language, setLanguage, t }) => {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="mt-4"
+            className="mt-4 flex gap-2 justify-center"
           >
             <Dialog open={showTutorial} onOpenChange={setShowTutorial}>
               <DialogTrigger asChild>
@@ -251,6 +269,136 @@ export const SetupScreen = ({ onStartGame, language, setLanguage, t }) => {
                 <div className="flex justify-end">
                   <Button onClick={() => setShowTutorial(false)} className="gradient-primary">
                     {t.tutorialButton}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+            
+            {/* Settings Dialog */}
+            <Dialog open={showSettings} onOpenChange={setShowSettings}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-accent border-accent/30 hover:bg-accent/10"
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  {t.settings}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-bold">{t.settingsTitle}</DialogTitle>
+                  <DialogDescription>{t.settingsSubtitle}</DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-6 py-4">
+                  {/* Timer Setting */}
+                  <div className="space-y-3">
+                    <Label className="text-sm font-semibold">{t.timerLabel}</Label>
+                    <div className="space-y-2">
+                      <Slider
+                        value={[settings.timer]}
+                        onValueChange={(value) => setSettings({...settings, timer: value[0]})}
+                        max={180}
+                        step={30}
+                        className="w-full"
+                      />
+                      <p className="text-sm text-muted-foreground text-center">
+                        {settings.timer === 0 ? t.timerOff : `${settings.timer} ${t.timerSeconds}`}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Rounds Setting */}
+                  <div className="space-y-3">
+                    <Label className="text-sm font-semibold">{t.roundsLabel}</Label>
+                    <p className="text-xs text-muted-foreground">{t.roundsDesc}</p>
+                    <Select 
+                      value={settings.rounds.toString()} 
+                      onValueChange={(value) => setSettings({...settings, rounds: parseInt(value)})}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">1</SelectItem>
+                        <SelectItem value="2">2</SelectItem>
+                        <SelectItem value="3">3</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {/* Imposter Count Setting */}
+                  <div className="space-y-3">
+                    <Label className="text-sm font-semibold">{t.imposterCountLabel}</Label>
+                    <p className="text-xs text-muted-foreground">{t.imposterCountDesc}</p>
+                    <Select 
+                      value={settings.imposterCount.toString()} 
+                      onValueChange={(value) => setSettings({...settings, imposterCount: parseInt(value)})}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">1 Imposter</SelectItem>
+                        <SelectItem value="2">2 Imposters</SelectItem>
+                        <SelectItem value="3">3 Imposters</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {/* Imposter Clue Setting */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-sm font-semibold">{t.imposterClueLabel}</Label>
+                      <p className="text-xs text-muted-foreground">
+                        {t.imposterClueDesc}
+                      </p>
+                    </div>
+                    <Switch
+                      checked={settings.showCategoryToImposter}
+                      onCheckedChange={(checked) => setSettings({...settings, showCategoryToImposter: checked})}
+                    />
+                  </div>
+                  
+                  {/* Category Setting */}
+                  <div className="space-y-3">
+                    <Label className="text-sm font-semibold">{t.categoryLabel}</Label>
+                    <Select 
+                      value={settings.category} 
+                      onValueChange={(value) => setSettings({...settings, category: value})}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">{t.categoryAll}</SelectItem>
+                        {categories.map((cat) => (
+                          <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {/* Sound Setting */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-sm font-semibold">{t.soundLabel}</Label>
+                      <p className="text-xs text-muted-foreground">
+                        {settings.sound ? t.soundOn : t.soundOff}
+                      </p>
+                    </div>
+                    <Switch
+                      checked={settings.sound}
+                      onCheckedChange={(checked) => setSettings({...settings, sound: checked})}
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button onClick={() => setShowSettings(false)} className="gradient-primary">
+                    {t.saveSettings}
                   </Button>
                 </div>
               </DialogContent>
