@@ -20,7 +20,7 @@ function App() {
   const t = getTranslation(language);
 
   const handleStartGame = (playerNames) => {
-    const word = getRandomWord();
+    const word = getRandomWord(language);
     const imposter = getRandomImposterIndex(playerNames.length);
     
     setPlayers(playerNames);
@@ -48,7 +48,7 @@ function App() {
   };
 
   const handlePlayAgain = () => {
-    const word = getRandomWord();
+    const word = getRandomWord(language);
     const imposter = getRandomImposterIndex(players.length);
     
     setWordData(word);
