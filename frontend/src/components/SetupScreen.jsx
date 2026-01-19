@@ -286,13 +286,13 @@ export const SetupScreen = ({ onStartGame, language, setLanguage, settings, setS
                   {t.settings}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle className="text-2xl font-bold">{t.settingsTitle}</DialogTitle>
+              <DialogContent className="max-w-md h-[600px] max-h-[80vh] p-0 gap-0 flex flex-col">
+                <DialogHeader className="px-6 pt-6 pb-4 flex-shrink-0">
+                  <DialogTitle className="text-2xl font-bold pr-8">{t.settingsTitle}</DialogTitle>
                   <DialogDescription>{t.settingsSubtitle}</DialogDescription>
                 </DialogHeader>
                 
-                <div className="space-y-6 py-4">
+                <div className="px-6 py-2 space-y-6 overflow-y-auto flex-1 min-h-0">
                   {/* Timer Setting */}
                   <div className="space-y-3">
                     <Label className="text-sm font-semibold">{t.timerLabel}</Label>
@@ -396,7 +396,7 @@ export const SetupScreen = ({ onStartGame, language, setLanguage, settings, setS
                   </div>
                 </div>
                 
-                <div className="flex justify-end">
+                <div className="px-6 py-4 flex justify-end flex-shrink-0 border-t border-border bg-background">
                   <Button onClick={() => setShowSettings(false)} className="gradient-primary">
                     {t.saveSettings}
                   </Button>
