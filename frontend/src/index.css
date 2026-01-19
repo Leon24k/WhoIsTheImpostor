@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family:
+        source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@layer base {
+    :root {
+        /* Base colors - Light mode (not used but kept for compatibility) */
+        --background: 0 0% 100%;
+        --foreground: 0 0% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 3.9%;
+        --primary: 0 0% 9%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 0 0% 96.1%;
+        --secondary-foreground: 0 0% 9%;
+        --muted: 0 0% 96.1%;
+        --muted-foreground: 0 0% 45.1%;
+        --accent: 0 0% 96.1%;
+        --accent-foreground: 0 0% 9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 89.8%;
+        --input: 0 0% 89.8%;
+        --ring: 0 0% 3.9%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.75rem;
+    }
+    
+    /* Game theme - Dark mode with vibrant purple/indigo */
+    .dark {
+        /* Background - Deep dark with subtle purple tint */
+        --background: 250 24% 8%;
+        --foreground: 250 10% 95%;
+        
+        /* Cards with elevated surface */
+        --card: 250 22% 12%;
+        --card-foreground: 250 10% 95%;
+        --card-elevated: 250 20% 16%;
+        
+        /* Popover */
+        --popover: 250 22% 12%;
+        --popover-foreground: 250 10% 95%;
+        
+        /* Primary - Vibrant purple */
+        --primary: 263 70% 60%;
+        --primary-foreground: 250 10% 98%;
+        --primary-glow: 263 70% 70%;
+        
+        /* Secondary - Deep indigo */
+        --secondary: 245 58% 51%;
+        --secondary-foreground: 250 10% 98%;
+        
+        /* Accent - Electric violet */
+        --accent: 280 80% 65%;
+        --accent-foreground: 250 10% 98%;
+        
+        /* Muted */
+        --muted: 250 16% 18%;
+        --muted-foreground: 250 8% 60%;
+        
+        /* Destructive - Vibrant red */
+        --destructive: 0 72% 58%;
+        --destructive-foreground: 250 10% 98%;
+        
+        /* Success - Vibrant green */
+        --success: 142 72% 50%;
+        --success-foreground: 250 10% 98%;
+        
+        /* Border & Input */
+        --border: 250 16% 20%;
+        --input: 250 16% 20%;
+        --ring: 263 70% 60%;
+        
+        /* Chart colors */
+        --chart-1: 263 70% 60%;
+        --chart-2: 245 58% 51%;
+        --chart-3: 280 80% 65%;
+        --chart-4: 320 70% 60%;
+        --chart-5: 200 70% 55%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+    html, body, #root {
+        @apply h-full;
+    }
+}
+
+/* Custom utilities for the game */
+@layer utilities {
+    .gradient-primary {
+        background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    }
+    
+    .gradient-accent {
+        background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
+    }
+    
+    .glow-primary {
+        box-shadow: 0 0 30px hsl(var(--primary) / 0.4), 0 0 60px hsl(var(--primary) / 0.2);
+    }
+    
+    .glow-accent {
+        box-shadow: 0 0 30px hsl(var(--accent) / 0.4), 0 0 60px hsl(var(--accent) / 0.2);
+    }
+    
+    .glow-destructive {
+        box-shadow: 0 0 30px hsl(var(--destructive) / 0.4), 0 0 60px hsl(var(--destructive) / 0.2);
+    }
+    
+    .text-gradient-primary {
+        background: linear-gradient(135deg, hsl(var(--primary-glow)), hsl(var(--accent)));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .card-shine {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-shine::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s;
+    }
+    
+    .card-shine:hover::before {
+        left: 100%;
+    }
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+        border-left-width: inherit;
+        border-right-width: inherit;
+        border-top-width: inherit;
+        border-bottom-width: inherit;
+        border-left-style: inherit;
+        border-right-style: inherit;
+        border-top-style: inherit;
+        border-bottom-style: inherit;
+        border-left-color: inherit;
+        border-right-color: inherit;
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+    }
+}
