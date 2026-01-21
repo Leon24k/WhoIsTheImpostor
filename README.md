@@ -313,33 +313,6 @@ Modify colors in `frontend/src/App.css`:
 }
 ```
 
-## 🔍 SEO Features
-
-The app includes comprehensive SEO optimization:
-
-### Meta Tags
-- Primary meta tags (title, description, keywords)
-- Open Graph tags (Facebook sharing)
-- Twitter Card tags (Twitter sharing)
-- Multi-language support (hreflang)
-- Canonical URLs
-
-### Structured Data
-- JSON-LD schema for MobileApplication
-- Game features and descriptions
-- Multi-language support metadata
-
-### Search Engine Files
-- `sitemap.xml` - Page structure for crawlers
-- `robots.txt` - Crawler permissions
-- Dynamic meta tags via React Helmet Async
-
-### Performance
-- Optimized bundle size
-- Static asset caching (1 year)
-- Source map disabled in production
-- Lazy loading ready
-
 ## 🐛 Troubleshooting
 
 ### "React Hook useEffect has missing dependency"
