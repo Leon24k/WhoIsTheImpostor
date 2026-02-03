@@ -11,6 +11,10 @@ An offline social deduction party game where your phone acts as a game master. P
 - **For Innocent Players**: You receive a secret word (e.g., "Cat"). Give clues without saying the word directly to prove you know it.
 - **For The Imposter**: You only see the category (e.g., "Animals"). Listen to others' clues, blend in, and avoid detection!
 
+## 🌐 Live Demo
+Try the game now: [Play Who Is The Impostor](https://whoistheimpostorgame.vercel.app/)
+
+
 ## ✨ Features
 
 ### 🎯 Core Gameplay
