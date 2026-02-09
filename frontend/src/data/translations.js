@@ -94,6 +94,8 @@ export const translations = {
       nextTurn: "Giliran Selanjutnya",
       startVoting: "Mulai Voting",
       players: "Pemain",
+      tipsLabel: "Tips",
+      tipsText: "Berikan petunjuk yang cukup jelas untuk pemain lain, tapi tidak terlalu spesifik sehingga Imposter bisa menebak",
     },
     
     // VotingScreen
@@ -103,6 +105,10 @@ export const translations = {
       selectPrompt: "Pilih pemain yang kamu curigai",
       confirmVote: "Konfirmasi Pilihan",
       voteFor: "Vote untuk",
+      passDevice: "Berikan perangkat ke",
+      ready: "Saya Siap!",
+      voterTurn: "Pemilih",
+      votingFor: "Kamu memilih {player} sebagai Imposter",
     },
     
     // ResultScreen
@@ -117,6 +123,10 @@ export const translations = {
       category: "Kategori",
       playAgain: "Main Lagi",
       backToSetup: "Kembali ke Home",
+      noOneSelected: "Tidak ada yang dipilih",
+      allPlayers: "Semua Pemain",
+      funFactWin: "🎉 Kerja tim yang bagus! Petunjuk kalian sangat membantu.",
+      funFactLose: "🎭 Imposter bermain dengan cerdas! Coba lagi dengan petunjuk yang lebih baik.",
     },
     
     // Language
@@ -222,6 +232,8 @@ export const translations = {
       nextTurn: "Next Turn",
       startVoting: "Start Voting",
       players: "Players",
+      tipsLabel: "Tips",
+      tipsText: "Give clues clear enough for other players, but not so specific that the Imposter can guess",
     },
     
     // VotingScreen
@@ -231,6 +243,10 @@ export const translations = {
       selectPrompt: "Select the player you suspect",
       confirmVote: "Confirm Vote",
       voteFor: "Vote for",
+      passDevice: "Pass the device to",
+      ready: "I'm Ready!",
+      voterTurn: "Voter",
+      votingFor: "Voting for {player} as Imposter",
     },
     
     // ResultScreen
@@ -245,6 +261,10 @@ export const translations = {
       category: "Category",
       playAgain: "Play Again",
       backToSetup: "Back to Home",
+      noOneSelected: "No one selected",
+      allPlayers: "All Players",
+      funFactWin: "🎉 Great teamwork! Your clues really helped.",
+      funFactLose: "🎭 The imposter played cleverly! Try again with better clues.",
     },
     
     // Language

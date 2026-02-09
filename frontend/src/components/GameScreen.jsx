@@ -235,8 +235,7 @@ export const GameScreen = ({ players, wordData, onStartVoting, settings, t }) =>
           className="mt-6 p-4 rounded-lg bg-primary/5 border border-primary/20"
         >
           <p className="text-xs text-center text-muted-foreground">
-            💡 <span className="font-semibold">Tips:</span> Berikan petunjuk yang cukup jelas untuk pemain lain, 
-            tapi tidak terlalu spesifik sehingga Imposter bisa menebak
+            💡 <span className="font-semibold">{t.tipsLabel || 'Tips'}:</span> {t.tipsText || 'Give clues clear enough for other players, but not so specific that the Imposter can guess'}
           </p>
         </motion.div>
       </motion.div>

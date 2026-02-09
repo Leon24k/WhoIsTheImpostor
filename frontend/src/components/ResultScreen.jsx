@@ -113,7 +113,7 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
                     <p className={`text-lg font-bold ${
                       innocentsWin ? 'text-success' : 'text-foreground'
                     }`}>
-                      {suspectedImposter || 'Tidak ada yang dipilih'}
+                      {suspectedImposter || (t.noOneSelected || 'No one selected')}
                     </p>
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
 
               {/* All Players */}
               <div className="pt-4 border-t border-border">
-                <p className="text-sm text-muted-foreground mb-3">Semua Pemain</p>
+                <p className="text-sm text-muted-foreground mb-3">{t.allPlayers || 'All Players'}</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {players.map((player, index) => {
                     const isImposter = imposterIndices.includes(index);
@@ -179,9 +179,9 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
           className="mt-6 p-4 rounded-lg bg-muted/50 border border-border text-center"
         >
           <p className="text-xs text-muted-foreground">
-            {innocentsWin 
-              ? '🎉 Kerja tim yang bagus! Petunjuk kalian sangat membantu.'
-              : '🎭 Imposter bermain dengan cerdas! Coba lagi dengan petunjuk yang lebih baik.'}
+            {innocentsWin
+              ? (t.funFactWin || '🎉 Great teamwork! Your clues really helped.')
+              : (t.funFactLose || '🎭 The imposter played cleverly! Try again with better clues.')}
           </p>
         </motion.div>
       </motion.div>

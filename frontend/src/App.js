@@ -60,7 +60,7 @@ function App() {
 
   const handlePlayAgain = () => {
     const word = getRandomWord(language, settings.category);
-    const imposter = getRandomImposterIndex(players.length);
+    const imposter = getRandomImposterIndex(players.length, settings.imposterCount);
     
     setWordData(word);
     setImposterIndex(imposter);
@@ -112,8 +112,8 @@ function App() {
         <html lang={language} />
         <title>{getPageTitle()}</title>
         <meta name="description" content={getPageDescription()} />
-        <link rel="alternate" hreflang="en" href="https://whoistheimpostorgame.vercel.app//?lang=en" />
-        <link rel="alternate" hreflang="id" href="https://whoistheimpostorgame.vercel.app//?lang=id" />
+        <link rel="alternate" hreflang="en" href="https://whoistheimpostorgame.vercel.app/?lang=en" />
+        <link rel="alternate" hreflang="id" href="https://whoistheimpostorgame.vercel.app/?lang=id" />
         <link rel="alternate" hreflang="x-default" href="https://whoistheimpostorgame.vercel.app/" />
       </Helmet>
       

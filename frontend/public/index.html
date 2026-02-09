@@ -19,7 +19,7 @@
         <meta property="og:url" content="https://whoistheimpostorgame.vercel.app/" />
         <meta property="og:title" content="Who Is The Imposter - Offline Party Game" />
         <meta property="og:description" content="Social deduction party game for 3+ players. Your phone acts as game master - pass the device, see your role, and find the imposter together in person!" />
-        <meta property="og:image" content="https://whoistheimpostorgame.vercel.app//og-image.png" />
+        <meta property="og:image" content="https://whoistheimpostorgame.vercel.app/og-image.png" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:locale:alternate" content="id_ID" />
         
@@ -28,7 +28,7 @@
         <meta property="twitter:url" content="https://whoistheimpostorgame.vercel.app/" />
         <meta property="twitter:title" content="Who Is The Imposter - Offline Party Game" />
         <meta property="twitter:description" content="Social deduction party game where your phone acts as game master. Pass the device and find the imposter!" />
-        <meta property="twitter:image" content="https://whoistheimpostorgame.vercel.app//og-image.png" />
+        <meta property="twitter:image" content="https://whoistheimpostorgame.vercel.app/og-image.png" />
         
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <!--
@@ -114,6 +114,10 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
         <script>
+            // Inject analytics key from build-time env var (set via REACT_APP_POSTHOG_KEY)
+            window.__POSTHOG_KEY__ = "%REACT_APP_POSTHOG_KEY%";
+        </script>
+        <script>
             !(function (t, e) {
                 var o, n, p, r;
                 e.__SV ||
@@ -175,7 +179,7 @@
                     }),
                     (e.__SV = 1));
             })(document, window.posthog || []);
-            posthog.init("phc_xAvL2Iq4tFmANRE7kzbKwaSqp1HJjN7x48s3vr0CMjs", {
+            posthog.init(window.__POSTHOG_KEY__ || "", {
                 api_host: "https://us.i.posthog.com",
                 person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well,
                 session_recording: {
