@@ -114,7 +114,9 @@ describe('ResultScreen', () => {
 
     expect(screen.getByText('All Players')).toBeInTheDocument();
     basePlayers.forEach((name) => {
-      expect(screen.getByText(new RegExp(name))).toBeInTheDocument();
+      // Players may appear in multiple sections (imposter reveal, suspected, player list)
+      const matches = screen.getAllByText(new RegExp(name));
+      expect(matches.length).toBeGreaterThanOrEqual(1);
     });
   });
 
