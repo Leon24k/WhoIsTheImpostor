@@ -46,16 +46,24 @@ export const VotingScreen = ({ players, onVoteComplete, t }) => {
     if (nextIndex >= players.length) {
       // All players have voted — determine the winner
       let maxCount = 0;
-      let suspected = null;
 
-      Object.entries(newVotes).forEach(([player, count]) => {
-        if (count > maxCount) {
-          maxCount = count;
-          suspected = player;
-        }
+      // Find the highest vote count
+      Object.values(newVotes).forEach((count) => {
+        if (count > maxCount) maxCount = count;
       });
 
-      onVoteComplete(suspected);
+      // Collect all players tied at the top
+      const topCandidates = Object.entries(newVotes)
+        .filter(([, count]) => count === maxCount)
+        .map(([player]) => player);
+
+      // Break ties randomly for fairness
+      const suspected =
+        topCandidates.length === 1
+          ? topCandidates[0]
+          : topCandidates[Math.floor(Math.random() * topCandidates.length)];
+
+      onVoteComplete(suspected, newVotes);
     } else {
       // Move to the next voter's "pass device" screen
       setCurrentVoterIndex(nextIndex);

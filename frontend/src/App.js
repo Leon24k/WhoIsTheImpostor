@@ -16,6 +16,7 @@ function App() {
   const [wordData, setWordData] = useState(null);
   const [imposterIndex, setImposterIndex] = useState(null);
   const [suspectedImposter, setSuspectedImposter] = useState(null);
+  const [voteTally, setVoteTally] = useState(null);
   const [language, setLanguage] = useState('id'); // 'id' or 'en'
   
   // Game Settings
@@ -53,8 +54,9 @@ function App() {
     setGameState('voting');
   };
 
-  const handleVoteComplete = (suspectedPlayer) => {
+  const handleVoteComplete = (suspectedPlayer, tally) => {
     setSuspectedImposter(suspectedPlayer);
+    setVoteTally(tally || null);
     setGameState('result');
   };
 
@@ -66,6 +68,7 @@ function App() {
     setImposterIndex(imposter);
     setCurrentPlayerIndex(0);
     setSuspectedImposter(null);
+    setVoteTally(null);
     setGameState('role');
   };
 
@@ -76,6 +79,7 @@ function App() {
     setWordData(null);
     setImposterIndex(null);
     setSuspectedImposter(null);
+    setVoteTally(null);
   };
 
   const getPageTitle = () => {
@@ -165,6 +169,7 @@ function App() {
           players={players}
           imposterIndex={imposterIndex}
           suspectedImposter={suspectedImposter}
+          voteTally={voteTally}
           wordData={wordData}
           onPlayAgain={handlePlayAgain}
           onBackToSetup={handleBackToSetup}

@@ -3,11 +3,18 @@ import { Trophy, XCircle, RotateCcw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
-export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordData, onPlayAgain, onBackToSetup, t }) => {
+export const ResultScreen = ({ players, imposterIndex, suspectedImposter, voteTally, wordData, onPlayAgain, onBackToSetup, t }) => {
   // Support both single imposter (number) and multiple imposters (array)
   const imposterIndices = Array.isArray(imposterIndex) ? imposterIndex : [imposterIndex];
   const actualImposters = imposterIndices.map(idx => players[idx]);
   const innocentsWin = actualImposters.includes(suspectedImposter);
+  const hasMultipleImposters = actualImposters.length > 1;
+
+  // Build a sorted tally for display (descending by vote count)
+  const sortedTally = voteTally
+    ? Object.entries(voteTally)
+        .sort(([, a], [, b]) => b - a)
+    : [];
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
@@ -53,8 +60,10 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
             transition={{ delay: 0.4 }}
             className="text-muted-foreground text-base sm:text-lg"
           >
-            {innocentsWin 
-              ? t.innocentsWinDesc
+            {innocentsWin
+              ? (hasMultipleImposters
+                  ? (t.innocentsWinPartialDesc || `You found 1 of ${actualImposters.length} imposters!`)
+                  : t.innocentsWinDesc)
               : t.imposterWinsDesc}
           </motion.p>
         </div>
@@ -118,6 +127,37 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, wordDa
                   </div>
                 </div>
               </div>
+
+              {/* Vote Tally */}
+              {sortedTally.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground mb-2">{t.voteTally || 'Vote Results'}</p>
+                  {sortedTally.map(([player, count]) => {
+                    const isImposter = actualImposters.includes(player);
+                    const maxVotes = sortedTally[0]?.[1] || 0;
+                    return (
+                      <div key={player} className="flex items-center gap-3">
+                        <span className={`text-sm font-medium w-24 truncate ${
+                          isImposter ? 'text-destructive' : 'text-foreground'
+                        }`}>
+                          {isImposter && '🎭 '}{player}
+                        </span>
+                        <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all ${
+                              count === maxVotes ? 'bg-accent' : 'bg-muted-foreground/30'
+                            }`}
+                            style={{ width: `${(count / players.length) * 100}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-semibold text-foreground w-8 text-right">
+                          {count}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* All Players */}
               <div className="pt-4 border-t border-border">
