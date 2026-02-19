@@ -35,6 +35,7 @@ const baseT = {
   innocentsWin: 'INNOCENTS WIN!',
   imposterWins: 'IMPOSTER WINS!',
   innocentsWinDesc: 'You found the imposter!',
+  innocentsWinPartialDesc: 'You found one of the imposters!',
   imposterWinsDesc: 'The imposter hid their identity!',
   theImposter: 'The imposter was',
   suspected: 'Suspected',
@@ -44,9 +45,56 @@ const baseT = {
   backToSetup: 'Back to Home',
   noOneSelected: 'No one selected',
   allPlayers: 'All Players',
+  voteTally: 'Vote Results',
   funFactWin: 'Great teamwork!',
   funFactLose: 'The imposter was clever!',
 };
+
+describe('ResultScreen vote tally', () => {
+  it('renders a vote tally when voteTally prop is provided', () => {
+    render(
+      <ResultScreen
+        players={basePlayers}
+        imposterIndex={[1]}
+        suspectedImposter="Bob"
+        voteTally={{ Bob: 2, Alice: 1 }}
+        wordData={baseWordData}
+        onPlayAgain={jest.fn()}
+        onBackToSetup={jest.fn()}
+        t={baseT}
+      />,
+    );
+
+    // Scope assertions to the tally area to avoid collisions with other occurrences of the same text
+    const tallyHeading = screen.getByText('Vote Results');
+    expect(tallyHeading).toBeInTheDocument();
+    const tallyContainer = tallyHeading.parentElement;
+    const { within } = require('@testing-library/react');
+    const scoped = within(tallyContainer);
+
+    expect(scoped.getByText(/Bob/)).toBeInTheDocument();
+    expect(scoped.getByText('2')).toBeInTheDocument();
+    expect(scoped.getByText(/Alice/)).toBeInTheDocument();
+    expect(scoped.getByText('1')).toBeInTheDocument();
+  });
+
+  it('shows partial innocents win message when there are multiple imposters but only one was identified', () => {
+    render(
+      <ResultScreen
+        players={basePlayers}
+        imposterIndex={[0, 2]} // Alice & Charlie
+        suspectedImposter="Alice"
+        voteTally={{ Alice: 1, Bob: 0, Charlie: 0 }}
+        wordData={baseWordData}
+        onPlayAgain={jest.fn()}
+        onBackToSetup={jest.fn()}
+        t={baseT}
+      />,
+    );
+
+    expect(screen.getByText('You found one of the imposters!')).toBeInTheDocument();
+  });
+});
 
 describe('ResultScreen', () => {
   it('displays "INNOCENTS WIN!" when the suspected player is the imposter', () => {

@@ -83,7 +83,7 @@ describe('VotingScreen', () => {
     expect(buttonLabels.some((l) => l.includes('Charlie'))).toBe(true);
   });
 
-  it('calls onVoteComplete with the most-voted player after all votes', () => {
+  it('calls onVoteComplete with the most-voted player after all votes and passes tally', () => {
     const onVoteComplete = jest.fn();
 
     render(
@@ -105,9 +105,43 @@ describe('VotingScreen', () => {
     fireEvent.click(screen.getByText('Bob'));
     fireEvent.click(screen.getByText('Confirm Vote'));
 
-    // Bob got 2 votes, Charlie got 1 → onVoteComplete should be called with "Bob"
+    // Bob got 2 votes, Charlie got 1 → onVoteComplete should be called with "Bob" and the tally
     expect(onVoteComplete).toHaveBeenCalledTimes(1);
-    expect(onVoteComplete).toHaveBeenCalledWith('Bob');
+    expect(onVoteComplete).toHaveBeenCalledWith('Bob', expect.objectContaining({ Bob: 2, Charlie: 1 }));
+  });
+
+  it('breaks ties deterministically when Math.random is mocked', () => {
+    const onVoteComplete = jest.fn();
+
+    // Make Math.random deterministic for this test so we can assert which tied candidate is chosen
+    const rnd = jest.spyOn(Math, 'random').mockReturnValueOnce(0.6);
+
+    render(
+      <VotingScreen players={basePlayers} onVoteComplete={onVoteComplete} t={baseT} />,
+    );
+
+    // Create a 3-way tie: each player gets 1 vote
+    // Alice -> Bob
+    fireEvent.click(screen.getByText("I'm Ready!"));
+    fireEvent.click(screen.getByText('Bob'));
+    fireEvent.click(screen.getByText('Confirm Vote'));
+
+    // Bob -> Charlie
+    fireEvent.click(screen.getByText("I'm Ready!"));
+    fireEvent.click(screen.getByText('Charlie'));
+    fireEvent.click(screen.getByText('Confirm Vote'));
+
+    // Charlie -> Alice
+    fireEvent.click(screen.getByText("I'm Ready!"));
+    fireEvent.click(screen.getByText('Alice'));
+    fireEvent.click(screen.getByText('Confirm Vote'));
+
+    // With insertion order of tally being Bob, Charlie, Alice and Math.random returning 0.6,
+    // selected index = floor(0.6 * 3) = 1 → 'Charlie' should be chosen
+    expect(onVoteComplete).toHaveBeenCalledTimes(1);
+    expect(onVoteComplete).toHaveBeenCalledWith('Charlie', expect.objectContaining({ Bob: 1, Charlie: 1, Alice: 1 }));
+
+    rnd.mockRestore();
   });
 
   it('disables confirm button when no player is selected', () => {
