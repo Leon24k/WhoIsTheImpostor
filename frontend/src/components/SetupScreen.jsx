@@ -33,6 +33,25 @@ export const SetupScreen = ({ onStartGame, language, setLanguage, settings, setS
   
   const categories = getCategories(language);
 
+  /** Maximum allowed character length for a player name */
+  const MAX_NAME_LENGTH = 20;
+
+  /**
+   * Sanitize a raw input string before storing it as a player name.
+   *
+   * Security rationale:
+   *  - Strip newlines / tab characters that would break layout.
+   *  - Strip angle brackets to prevent accidental HTML injection
+   *    (defence-in-depth; React already escapes JSX output).
+   *  - Strip null bytes which can cause issues in JSON serialisation.
+   *  - Enforce a hard maximum length so long names cannot break layouts.
+   */
+  const sanitizeName = (raw) =>
+    raw
+      .replace(/[\r\n\t\0]/g, '')      // control characters
+      .replace(/[<>]/g, '')             // HTML angle brackets
+      .slice(0, MAX_NAME_LENGTH);       // hard length cap
+
   const addPlayer = () => {
     setPlayers([...players, '']);
     setError('');
@@ -47,7 +66,7 @@ export const SetupScreen = ({ onStartGame, language, setLanguage, settings, setS
 
   const updatePlayer = (index, value) => {
     const newPlayers = [...players];
-    newPlayers[index] = value;
+    newPlayers[index] = sanitizeName(value);
     setPlayers(newPlayers);
     setError('');
   };
@@ -423,6 +442,9 @@ export const SetupScreen = ({ onStartGame, language, setLanguage, settings, setS
                     placeholder={`${t.playerPlaceholder} ${index + 1}`}
                     value={player}
                     onChange={(e) => updatePlayer(index, e.target.value)}
+                    maxLength={20}
+                    autoComplete="off"
+                    spellCheck={false}
                     className="bg-muted border-border text-foreground placeholder:text-muted-foreground h-12 text-base"
                   />
                 </div>

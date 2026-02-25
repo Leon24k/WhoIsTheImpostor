@@ -33,6 +33,7 @@ const baseWordData = { word: 'Cat', category: 'Animals' };
 
 const baseT = {
   innocentsWin: 'INNOCENTS WIN!',
+  partialWin: 'PARTIAL WIN!',
   imposterWins: 'IMPOSTER WINS!',
   innocentsWinDesc: 'You found the imposter!',
   innocentsWinPartialDesc: 'You found one of the imposters!',
@@ -47,6 +48,7 @@ const baseT = {
   allPlayers: 'All Players',
   voteTally: 'Vote Results',
   funFactWin: 'Great teamwork!',
+  funFactPartial: 'One imposter caught, another escaped!',
   funFactLose: 'The imposter was clever!',
 };
 
@@ -184,7 +186,7 @@ describe('ResultScreen', () => {
     expect(screen.getByText('No one selected')).toBeInTheDocument();
   });
 
-  it('supports multi-imposter (array) indices', () => {
+  it('supports multi-imposter (array) indices — partial win', () => {
     render(
       <ResultScreen
         players={basePlayers}
@@ -197,8 +199,27 @@ describe('ResultScreen', () => {
       />,
     );
 
-    // Alice is one of the imposters, so innocents win
+    // Caught Alice (one of two imposters) → PARTIAL WIN!, not full innocents win
+    expect(screen.getByText('PARTIAL WIN!')).toBeInTheDocument();
+    expect(screen.getByText('You found one of the imposters!')).toBeInTheDocument();
+  });
+
+  it('shows INNOCENTS WIN when single imposter is correctly identified', () => {
+    render(
+      <ResultScreen
+        players={basePlayers}
+        imposterIndex={[1]} // only Bob
+        suspectedImposter="Bob"
+        wordData={baseWordData}
+        onPlayAgain={jest.fn()}
+        onBackToSetup={jest.fn()}
+        t={baseT}
+      />,
+    );
+
+    // Single imposter caught → full win
     expect(screen.getByText('INNOCENTS WIN!')).toBeInTheDocument();
+    expect(screen.getByText('You found the imposter!')).toBeInTheDocument();
   });
 
   it('supports legacy single-number imposterIndex', () => {

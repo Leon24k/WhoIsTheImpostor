@@ -114,9 +114,10 @@ export const translations = {
     // ResultScreen
     result: {
       innocentsWin: "PEMAIN BIASA MENANG!",
+      partialWin: "MENANG SEBAGIAN!",
       imposterWins: "IMPOSTER MENANG!",
       innocentsWinDesc: "Kalian berhasil menemukan imposter!",
-      innocentsWinPartialDesc: "Kalian berhasil menemukan salah satu imposter!",
+      innocentsWinPartialDesc: "Kalian berhasil menemukan salah satu imposter! Tapi masih ada yang lolos.",
       imposterWinsDesc: "Imposter berhasil menyembunyikan identitasnya!",
       theImposter: "Imposternya adalah",
       suspected: "Yang dicurigai",
@@ -128,6 +129,7 @@ export const translations = {
       allPlayers: "Semua Pemain",
       voteTally: "Hasil Voting",
       funFactWin: "🎉 Kerja tim yang bagus! Petunjuk kalian sangat membantu.",
+      funFactPartial: "🤔 Satu imposter tertangkap, tapi yang lain lolos! Coba lagi.",
       funFactLose: "🎭 Imposter bermain dengan cerdas! Coba lagi dengan petunjuk yang lebih baik.",
     },
     
@@ -254,9 +256,10 @@ export const translations = {
     // ResultScreen
     result: {
       innocentsWin: "INNOCENTS WIN!",
+      partialWin: "PARTIAL WIN!",
       imposterWins: "IMPOSTER WINS!",
       innocentsWinDesc: "You successfully found the imposter!",
-      innocentsWinPartialDesc: "You found one of the imposters!",
+      innocentsWinPartialDesc: "You found one imposter — but another is still hiding!",
       imposterWinsDesc: "The imposter successfully hid their identity!",
       theImposter: "The imposter was",
       suspected: "Suspected",
@@ -268,6 +271,7 @@ export const translations = {
       allPlayers: "All Players",
       voteTally: "Vote Results",
       funFactWin: "🎉 Great teamwork! Your clues really helped.",
+      funFactPartial: "🤔 One imposter caught, but another slipped away! Try again.",
       funFactLose: "🎭 The imposter played cleverly! Try again with better clues.",
     },
     

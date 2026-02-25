@@ -4,16 +4,22 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 export const ResultScreen = ({ players, imposterIndex, suspectedImposter, voteTally, wordData, onPlayAgain, onBackToSetup, t }) => {
-  // Support both single imposter (number) and multiple imposters (array)
+  // Normalise: support legacy single-number index and modern array
   const imposterIndices = Array.isArray(imposterIndex) ? imposterIndex : [imposterIndex];
   const actualImposters = imposterIndices.map(idx => players[idx]);
-  const innocentsWin = actualImposters.includes(suspectedImposter);
-  const hasMultipleImposters = actualImposters.length > 1;
+
+  // Win-condition logic
+  //  - innocentsWin:    the voted player is one of the imposters
+  //  - allImpostersFound: innocents won AND there was only one imposter
+  //    (i.e. a perfect, complete victory)
+  //  - isPartialWin:   innocents caught one imposter but others remain
+  const innocentsWin     = actualImposters.includes(suspectedImposter);
+  const allImpostersFound = innocentsWin && actualImposters.length === 1;
+  const isPartialWin     = innocentsWin && actualImposters.length > 1;
 
   // Build a sorted tally for display (descending by vote count)
   const sortedTally = voteTally
-    ? Object.entries(voteTally)
-        .sort(([, a], [, b]) => b - a)
+    ? Object.entries(voteTally).sort(([, a], [, b]) => b - a)
     : [];
 
   return (
@@ -51,7 +57,11 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, voteTa
               innocentsWin ? 'text-gradient-primary' : 'text-destructive'
             }`}
           >
-            {innocentsWin ? t.innocentsWin : t.imposterWins}
+            {allImpostersFound
+            ? t.innocentsWin
+            : isPartialWin
+              ? (t.partialWin || 'PARTIAL WIN!')
+              : t.imposterWins}
           </motion.h1>
           
           <motion.p
@@ -60,11 +70,11 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, voteTa
             transition={{ delay: 0.4 }}
             className="text-muted-foreground text-base sm:text-lg"
           >
-            {innocentsWin
-              ? (hasMultipleImposters
-                  ? (t.innocentsWinPartialDesc || `You found 1 of ${actualImposters.length} imposters!`)
-                  : t.innocentsWinDesc)
-              : t.imposterWinsDesc}
+            {allImpostersFound
+              ? t.innocentsWinDesc
+              : isPartialWin
+                ? t.innocentsWinPartialDesc
+                : t.imposterWinsDesc}
           </motion.p>
         </div>
 
@@ -219,9 +229,11 @@ export const ResultScreen = ({ players, imposterIndex, suspectedImposter, voteTa
           className="mt-6 p-4 rounded-lg bg-muted/50 border border-border text-center"
         >
           <p className="text-xs text-muted-foreground">
-            {innocentsWin
-              ? (t.funFactWin || '🎉 Great teamwork! Your clues really helped.')
-              : (t.funFactLose || '🎭 The imposter played cleverly! Try again with better clues.')}
+            {allImpostersFound
+              ? t.funFactWin
+              : isPartialWin
+                ? (t.funFactPartial || t.funFactWin)
+                : t.funFactLose}
           </p>
         </motion.div>
       </motion.div>

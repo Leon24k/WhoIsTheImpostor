@@ -36,29 +36,43 @@ export const GameScreen = ({ players, wordData, onStartVoting, settings, t }) =>
       }
     }
   }, [currentTurn, playerOrder, roundsCompleted, totalRounds, onStartVoting]);
-  
-  // Timer effect
+
+  /**
+   * Timer countdown — one interval per turn.
+   *
+   * Industry best practice:
+   *  - Effects that start intervals should NOT include the changing value
+   *    (timeLeft) as a dependency, to avoid recreating the interval every tick.
+   *  - State updater functions must be pure — never call side-effects
+   *    (e.g. handleNextTurn) inside setTimeLeft().
+   *  - Auto-advance is handled in a separate dedicated effect that watches
+   *    only `timeLeft`, keeping concerns separated.
+   */
   useEffect(() => {
-    if (settings.timer > 0 && timeLeft > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            // Auto-advance when timer runs out
-            handleNextTurn();
-            return settings.timer;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      
-      return () => clearInterval(timer);
+    // When timer is disabled, reset to 0 and bail out immediately
+    if (settings.timer === 0) {
+      setTimeLeft(0);
+      return;
+    }
+
+    // Start a fresh countdown for this turn
+    setTimeLeft(settings.timer);
+    const interval = setInterval(() => {
+      setTimeLeft(prev => Math.max(0, prev - 1));
+    }, 1000);
+
+    return () => clearInterval(interval);
+    // Intentionally excludes `timeLeft` — re-runs only when the turn or
+    // timer setting changes, not every tick.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTurn, settings.timer]);
+
+  // Auto-advance to the next turn when the countdown reaches zero
+  useEffect(() => {
+    if (settings.timer > 0 && timeLeft === 0) {
+      handleNextTurn();
     }
   }, [timeLeft, settings.timer, handleNextTurn]);
-  
-  // Reset timer when turn changes
-  useEffect(() => {
-    setTimeLeft(settings.timer);
-  }, [currentTurn, settings.timer]);
 
   const currentPlayer = playerOrder[currentTurn];
   const progress = ((roundsCompleted * players.length + currentTurn + 1) / (totalRounds * players.length)) * 100;
